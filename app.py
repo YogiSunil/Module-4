@@ -43,67 +43,93 @@ def get_letter_for_units(units):
 @app.route('/results')
 def results():
     """Displays results for current weather conditions."""
-    # TODO: Use 'request.args' to retrieve the city & units from the query
-    # parameters.
-    city = ''
-    units = ''
+    # Retrieve the city and units from query parameters
+    city = request.args.get('city', '')
+    units = request.args.get('units', 'imperial')  # Default to 'imperial'
 
+    # Query parameters for API request
     params = {
-        # TODO: Enter query parameters here for the 'appid' (your api key),
-        # the city, and the units (metric or imperial).
-        # See the documentation here: https://openweathermap.org/current
-
+        'appid': API_KEY,
+        'q': city,
+        'units': units
     }
 
+    # API call
     result_json = requests.get(API_URL, params=params).json()
 
-    # Uncomment the line below to see the results of the API call!
-    # pp.pprint(result_json)
+    # Check if the city is valid
+    if result_json.get('cod') != 200:
+        error_message = f"City '{city}' not found. Please try again."
+        return render_template('error.html', error_message=error_message)
 
-    # TODO: Replace the empty variables below with their appropriate values.
-    # You'll need to retrieve these from the result_json object above.
-
-    # For the sunrise & sunset variables, I would recommend to turn them into
-    # datetime objects. You can do so using the `datetime.fromtimestamp()` 
-    # function.
+    # Extract relevant data from the API response
     context = {
         'date': datetime.now(),
-        'city': '',
-        'description': '',
-        'temp': '',
-        'humidity': '',
-        'wind_speed': '',
-        'sunrise': '',
-        'sunset': '',
+        'city': result_json['name'],
+        'description': result_json['weather'][0]['description'].capitalize(),
+        'temp': result_json['main']['temp'],
+        'humidity': result_json['main']['humidity'],
+        'wind_speed': result_json['wind']['speed'],
+        'sunrise': datetime.fromtimestamp(result_json['sys']['sunrise']),
+        'sunset': datetime.fromtimestamp(result_json['sys']['sunset']),
         'units_letter': get_letter_for_units(units)
     }
 
     return render_template('results.html', **context)
 
+def fetch_weather_data(city, units):
+    """Helper function to fetch weather data for a given city."""
+    params = {
+        'appid': API_KEY,
+        'q': city,
+        'units': units
+    }
+    response = requests.get(API_URL, params=params).json()
+    if response.get('cod') != 200:
+        return None  # City not found or API error
+    return {
+        'name': response['name'],
+        'temp': response['main']['temp'],
+        'humidity': response['main']['humidity'],
+        'wind_speed': response['wind']['speed'],
+        'sunset': datetime.fromtimestamp(response['sys']['sunset']),
+        'description': response['weather'][0]['description'],
+        'icon': response['weather'][0]['icon']
+    }
 
 @app.route('/comparison_results')
 def comparison_results():
-    """Displays the relative weather for 2 different cities."""
-    # TODO: Use 'request.args' to retrieve the cities & units from the query
-    # parameters.
-    city1 = ''
-    city2 = ''
-    units = ''
+    """Displays the relative weather for two different cities."""
+    city1 = request.args.get('city1', '')
+    city2 = request.args.get('city2', '')
+    units = request.args.get('units', 'imperial')
 
-    # TODO: Make 2 API calls, one for each city. HINT: You may want to write a 
-    # helper function for this!
+    # Fetch weather data for both cities
+    city1_data = fetch_weather_data(city1, units)
+    city2_data = fetch_weather_data(city2, units)
 
+    # Handle invalid cities
+    if not city1_data or not city2_data:
+        error_message = "One or both cities not found. Please try again."
+        return render_template('error.html', error_message=error_message)
 
-    # TODO: Pass the information for both cities in the context. Make sure to
-    # pass info for the temperature, humidity, wind speed, and sunset time!
-    # HINT: It may be useful to create 2 new dictionaries, `city1_info` and 
-    # `city2_info`, to organize the data.
+    # Calculate relative differences
+    temp_diff = city1_data['temp'] - city2_data['temp']
+    humidity_diff = city1_data['humidity'] - city2_data['humidity']
+    wind_speed_diff = city1_data['wind_speed'] - city2_data['wind_speed']
+    sunset_diff = (city1_data['sunset'] - city2_data['sunset']).total_seconds() / 3600
+
     context = {
-
+        'city1_info': city1_data,
+        'city2_info': city2_data,
+        'temp_diff': temp_diff,
+        'humidity_diff': humidity_diff,
+        'wind_speed_diff': wind_speed_diff,
+        'sunset_diff': sunset_diff,
+        'units_letter': get_letter_for_units(units)
     }
 
     return render_template('comparison_results.html', **context)
-
 
 if __name__ == '__main__':
     app.config['ENV'] = 'development'

@@ -1,28 +1,225 @@
+/* General Page Styles */
 body {
-    background-color: #e6faff;
+    background: linear-gradient(135deg, #4c6ef5, #6a82fb); /* Cooler gradient with shades of blue and purple */
     display: flex;
     justify-content: center;
-    font-family: "Roboto", sans-serif;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif; /* Trendy font */
+    margin: 0;
+    color: #f0f4f8;
+    overflow: hidden; /* Prevents scrollbars */
 }
 
+/* Main Section Styles */
 main {
-    width: 800px;
+    width: 90%;
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.6); /* Transparent background for modern look */
+    border-radius: 15px;
+    padding: 30px;
+    overflow: hidden;
+    backdrop-filter: blur(10px); /* Soft background blur for aesthetic */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
-main > section {
-    background-color: #fff;
-    border: 1px solid #007a99;
-    box-shadow: 5px 5px 5px #999;
-    padding: 20px;
-    margin-top: 20px;
-    width: 100%;
+/* Header Styles */
+h1 {
+    color: #00bcd4; /* Vibrant cyan */
+    font-size: 3rem;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+    animation: glow 1.5s ease-in-out infinite alternate;
+    position: relative;
+    z-index: 1;
 }
 
-fieldset {
-    border: 1px solid #000;
+/* Glow Animation for Header */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #00bcd4, 0 0 20px #00bcd4, 0 0 30px #00bcd4;
+    }
+    100% {
+        text-shadow: 0 0 20px #ff4081, 0 0 30px #ff4081, 0 0 40px #ff4081;
+    }
 }
 
-h1 a {
-    color: #000;
-    text-decoration: none;
+/* Weather Cards Styles */
+.weather-card {
+    background: #1c1c1c;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.4s ease, box-shadow 0.3s ease;
+    border-left: 10px solid #00bcd4;
+    position: relative;
+}
+
+/* Hover effect for weather cards */
+.weather-card:hover {
+    transform: translateY(-10px); /* Lift effect on hover */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Mouse Movement Effect on Weather Card */
+.weather-card {
+    pointer-events: auto;
+}
+
+.weather-card:hover {
+    transform: scale(1.05) rotate(5deg); /* Slight rotation and scaling */
+}
+
+.weather-card:hover .weather-info {
+    transform: translateX(-10px) scale(1.1);
+}
+
+/* Weather Card Information Styling */
+.weather-card .weather-info {
+    font-size: 1.5rem;
+    color: #e0e0e0;
+    text-align: left;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.weather-card .weather-info .condition {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ff4081; /* Soft pink for condition */
+}
+
+.weather-card .weather-info .temp {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 10px;
+    color: #00bcd4; /* Cyan for temperature */
+}
+
+.weather-card .weather-info .other-info {
+    font-size: 1.2rem;
+    color: #b0bec5; /* Light grey for less emphasis */
+}
+
+/* Weather Icon Styles */
+.weather-card .weather-icon {
+    font-size: 4rem;
+    color: #ff4081;
+    margin-left: 15px;
+    animation: bounce 2s infinite alternate;
+}
+
+/* Bounce Animation for Weather Icon */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Button Styles */
+button {
+    background-color: #00bcd4;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #ff4081;
+    transform: translateY(-3px); /* Button hover effect */
+}
+
+/* Comparison Card Styles */
+.compare-card {
+    background: #292b2f;
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    color: #e0e0e0;
+}
+
+.compare-card .compare-info .condition {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #ff4081;
+}
+
+.compare-card .compare-info .temp {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 10px;
+    color: #00bcd4;
+}
+
+.compare-card .compare-info .other-info {
+    font-size: 1.2rem;
+    color: #b0bec5;
+}
+
+/* Mouse Movement Effect on Comparison Card */
+.compare-card {
+    pointer-events: auto;
+}
+
+.compare-card:hover {
+    transform: scale(1.05) rotate(5deg); /* Slight rotation and scaling */
+}
+
+.compare-card:hover .compare-info {
+    transform: translateX(10px) scale(1.1);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Adjust header font for smaller screens */
+    }
+
+    .weather-card,
+    .compare-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .weather-card .weather-icon,
+    .compare-card .compare-icon {
+        font-size: 3rem;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    button {
+        width: 100%; /* Full width button on smaller screens */
+    }
 }

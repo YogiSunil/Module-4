@@ -2,34 +2,37 @@
 {% block content %}
 
 <section class="weather-form">
-    {# 
-        TODO: Replace the hard-coded cities and date below with data from the 
-        server.
-    #}
-    <h1>Weather in [CITY1] and [CITY2]</h1>
-    <p>[TODAYS_DATE]</p>
+    <h1>Weather in {{ city1 }} and {{ city2 }}</h1>
+    <p>{{ todays_date }}</p>
 
+    <div class="compare-card">
+        <div class="compare-info">
+            <div class="condition">{{ city1_info.condition }}</div>
+            <div class="temp">{{ city1_info.temperature }}° {{ units }}</div>
+            <div class="other-info">Humidity: {{ city1_info.humidity }}%, Wind: {{ city1_info.wind_speed }} m/s</div>
+            <div class="other-info">Sunset: {{ city1_info.sunset }}</div>
+        </div>
+        <div class="compare-icon">
+            <img src="https://openweathermap.org/img/wn/{{ city1_info.icon }}.png" alt="Weather Icon">
+        </div>
+    </div>
 
-    {#
-        TODO: Add the temperature, description, and min & max temperature below.
-        Replace 'F' with the appropriate units.
-    #}
-    <p>
-        It is [NUM_DEGREES] [UNITS] [WARMER/COLDER] in [CITY1] than in [CITY2] today.
-    </p>
+    <div class="compare-card">
+        <div class="compare-info">
+            <div class="condition">{{ city2_info.condition }}</div>
+            <div class="temp">{{ city2_info.temperature }}° {{ units }}</div>
+            <div class="other-info">Humidity: {{ city2_info.humidity }}%, Wind: {{ city2_info.wind_speed }} m/s</div>
+            <div class="other-info">Sunset: {{ city2_info.sunset }}</div>
+        </div>
+        <div class="compare-icon">
+            <img src="https://openweathermap.org/img/wn/{{ city2_info.icon }}.png" alt="Weather Icon">
+        </div>
+    </div>
 
-    <p>
-        The humidity in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
-
-    <p>
-        The wind speed in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
-
-    <p>
-        The sun sets in [CITY1] [HOURS] hours [EARLIER/LATER] than in [CITY2].
-    </p>
-    
+    <p>{{ temp_comparison }}</p>
+    <p>{{ humidity_comparison }}</p>
+    <p>{{ wind_comparison }}</p>
+    <p>{{ sunset_comparison }}</p>
 </section>
 
 {% endblock %}
